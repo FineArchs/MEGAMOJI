@@ -13,6 +13,7 @@ import Rampart from "../fonts/RampartOne-Regular.woff";
 import HachiMaruPop from "../fonts/HachiMaruPop-Regular.woff";
 import Dohetaji from "../fonts/doheta_j.woff";
 import TamanegiKaishoGeki from "../fonts/TamanegiKaishoGekiV6.woff";
+import Kointai from "../fonts/g_comickoin_freeL.woff";
 
 const loadFont = (font: Record<string, string>) => {
   const family = Object.keys(font)[0];
@@ -47,6 +48,7 @@ export default [
       { label: "PixelMplus", value: loadFont({ PixelMplus }) },
       { label: "レゲエ", value: loadFont({ Reggae }) },
       { label: "ランパート", value: loadFont({ Rampart }) },
+      { label: "古印体", value: loadFont({ Kointai }) },
     ],
   },
 ];
