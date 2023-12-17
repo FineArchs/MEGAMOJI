@@ -22725,7 +22725,7 @@ const GA4_TOKEN = "";
 // eslint-disable-next-line prefer-destructuring
 const NODE_ENV = "development";
 // eslint-disable-next-line prefer-destructuring
-const CODE_VERSION = "275b04f66b4c88b6c186366dda14add5ab8d5079";
+const CODE_VERSION = "2cf2576d4b3be4a85218e92a38fb606be319cc01";
 
 
 /***/ }),
