@@ -292,7 +292,7 @@ export default defineComponent({
                   @update:model-value="changeEmojiSize" />
             </Space>
           </Fieldset>
-          <Fieldset v-if="showDetails && isDev" label="開発者向け">
+          <Fieldset label="開発者向け">
             <Button danger type="text" name="開発者モード" @click="devMode = true">
               <template #icon>
                 🔨
