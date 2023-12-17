@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "CODE_VERSION=\"$(git rev-parse HEAD)\" webpack --mode production",
+    "build": "CODE_VERSION=\"$(git rev-parse HEAD)\" webpack --mode development",
     "build-storybook": "build-storybook -o dist/storybook",
     "start": "CODE_VERSION=\"$(git rev-parse HEAD)\" webpack serve --mode development",
     "lint": "npm run lint:css && npm run lint:js",
