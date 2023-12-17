@@ -3,7 +3,7 @@ name: Stage
 on:
   push:
     branches:
-      - develop
+      - devpage
   workflow_dispatch:
 
 jobs:
