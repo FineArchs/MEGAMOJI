@@ -18082,30 +18082,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     _: 1 /* STABLE */
                                                 }))
                                                 : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
-                                            (_ctx.showDetails && _ctx.isDev)
-                                                ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Fieldset, {
-                                                    key: 2,
-                                                    label: "開発者向け"
-                                                }, {
-                                                    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
-                                                        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
-                                                            danger: "",
-                                                            type: "text",
-                                                            name: "開発者モード",
-                                                            onClick: _cache[5] || (_cache[5] = ($event) => (_ctx.devMode = true))
-                                                        }, {
-                                                            icon: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
-                                                                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 🔨 ")
-                                                            ]),
-                                                            default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
-                                                                (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 開発者モード ")
-                                                            ]),
-                                                            _: 1 /* STABLE */
-                                                        })
-                                                    ]),
-                                                    _: 1 /* STABLE */
-                                                }))
-                                                : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+                                            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Fieldset, { label: "開発者向け" }, {
+                                                default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+                                                    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
+                                                        danger: "",
+                                                        type: "text",
+                                                        name: "開発者モード",
+                                                        onClick: _cache[5] || (_cache[5] = ($event) => (_ctx.devMode = true))
+                                                    }, {
+                                                        icon: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+                                                            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 🔨 ")
+                                                        ]),
+                                                        default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+                                                            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 開発者モード ")
+                                                        ]),
+                                                        _: 1 /* STABLE */
+                                                    })
+                                                ]),
+                                                _: 1 /* STABLE */
+                                            })
                                         ]),
                                         _: 1 /* STABLE */
                                     })
@@ -22730,7 +22725,7 @@ const GA4_TOKEN = "";
 // eslint-disable-next-line prefer-destructuring
 const NODE_ENV = "development";
 // eslint-disable-next-line prefer-destructuring
-const CODE_VERSION = "4930f2416fb9a36fd1282c7713a7ccc9c2f5e03a";
+const CODE_VERSION = "fafd369fe8d441c0bf592fb76554736366352ace";
 
 
 /***/ }),
