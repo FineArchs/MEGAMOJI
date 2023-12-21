@@ -1,2 +1,938 @@
-(()=>{var t={5958:(t,e)=>{var r=Object.defineProperty;r(e,"__esModule",{value:!0}),((t,e)=>{for(var n in e)r(t,n,{get:e[n],enumerable:!0})})(e,{GIFEncoder:()=>C,applyPalette:()=>d,default:()=>E,nearestColor:()=>x,nearestColorIndex:()=>v,nearestColorIndexWithDistance:()=>k,prequantize:()=>p,quantize:()=>y,snapColorsToPalette:()=>A});var n={signature:"GIF",version:"89a",trailer:59,extensionIntroducer:33,applicationExtensionLabel:255,graphicControlExtensionLabel:249,imageSeparator:44,signatureSize:3,versionSize:3,globalColorTableFlagMask:128,colorResolutionMask:112,sortFlagMask:8,globalColorTableSizeMask:7,applicationIdentifierSize:8,applicationAuthCodeSize:3,disposalMethodMask:28,userInputFlagMask:2,transparentColorFlagMask:1,localColorTableFlagMask:128,interlaceFlagMask:64,idSortFlagMask:32,localColorTableSizeMask:7};function a(t=256){let e=0,r=new Uint8Array(t);return{get buffer(){return r.buffer},reset(){e=0},bytesView:()=>r.subarray(0,e),bytes:()=>r.slice(0,e),writeByte(t){n(e+1),r[e]=t,e++},writeBytes(t,a=0,o=t.length){n(e+o);for(let n=0;n<o;n++)r[e++]=t[n+a]},writeBytesView(t,a=0,o=t.byteLength){n(e+o),r.set(t.subarray(a,a+o),e),e+=o}};function n(t){var n=r.length;if(n>=t)return;t=Math.max(t,n*(n<1048576?2:1.125)>>>0),0!=n&&(t=Math.max(t,256));const a=r;r=new Uint8Array(t),e>0&&r.set(a.subarray(0,e),0)}}var o=[0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,65535],i=function(t,e,r,n,i=a(512),c=new Uint8Array(256),l=new Int32Array(5003),s=new Int32Array(5003)){const f=l.length,u=Math.max(2,n);c.fill(0),s.fill(0),l.fill(-1);let w=0,y=0;const h=u+1,g=h;let b=!1,p=g,d=(1<<p)-1;const m=1<<h-1,B=m+1;let A=m+2,M=0,v=r[0],k=0;for(let t=f;t<65536;t*=2)++k;k=8-k,i.writeByte(u),C(m);const x=r.length;for(let t=1;t<x;t++)t:{const e=r[t],n=(e<<12)+v;let a=e<<k^v;if(l[a]===n){v=s[a];break t}const o=0===a?1:f-a;for(;l[a]>=0;)if(a-=o,a<0&&(a+=f),l[a]===n){v=s[a];break t}C(v),v=e,A<4096?(s[a]=A++,l[a]=n):(l.fill(-1),A=m+2,b=!0,C(m))}return C(v),C(B),i.writeByte(0),i.bytesView();function C(t){for(w&=o[y],y>0?w|=t<<y:w=t,y+=p;y>=8;)c[M++]=255&w,M>=254&&(i.writeByte(M),i.writeBytesView(c,0,M),M=0),w>>=8,y-=8;if((A>d||b)&&(b?(p=g,d=(1<<p)-1,b=!1):(++p,d=12===p?1<<p:(1<<p)-1)),t==B){for(;y>0;)c[M++]=255&w,M>=254&&(i.writeByte(M),i.writeBytesView(c,0,M),M=0),w>>=8,y-=8;M>0&&(i.writeByte(M),i.writeBytesView(c,0,M),M=0)}}};function c(t,e,r){return t<<8&63488|e<<2&992|r>>3}function l(t,e,r,n){return t>>4|240&e|(240&r)<<4|(240&n)<<8}function s(t,e,r){return t>>4<<8|240&e|r>>4}function f(t,e,r){return t<e?e:t>r?r:t}function u(t){return t*t}function w(t,e,r){var n=0,a=1e100;const o=t[e],i=o.cnt,c=o.ac,l=o.rc,s=o.gc,f=o.bc;for(var w=o.fw;0!=w;w=t[w].fw){const e=t[w],o=e.cnt,h=i*o/(i+o);if(!(h>=a)){var y=0;r&&(y+=h*u(e.ac-c))>=a||(y+=h*u(e.rc-l))>=a||(y+=h*u(e.gc-s))>=a||(y+=h*u(e.bc-f))>=a||(a=y,n=w)}}o.err=a,o.nn=n}function y(t,e,r={}){const{format:n="rgb565",clearAlpha:a=!0,clearAlphaColor:o=0,clearAlphaThreshold:i=0,oneBitAlpha:y=!1}=r;if(!t||!t.buffer)throw new Error("quantize() expected RGBA Uint8Array data");if(!(t instanceof Uint8Array||t instanceof Uint8ClampedArray))throw new Error("quantize() expected RGBA Uint8Array data");const g=new Uint32Array(t.buffer);let b=!1!==r.useSqrt;const p="rgba4444"===n,d=function(t,e){const r=new Array("rgb444"===e?4096:65536),n=t.length;if("rgba4444"===e)for(let e=0;e<n;++e){const n=t[e],a=n>>24&255,o=n>>16&255,i=n>>8&255,c=255&n,s=l(c,i,o,a);let f=s in r?r[s]:r[s]={ac:0,rc:0,gc:0,bc:0,cnt:0,nn:0,fw:0,bk:0,tm:0,mtm:0,err:0};f.rc+=c,f.gc+=i,f.bc+=o,f.ac+=a,f.cnt++}else if("rgb444"===e)for(let e=0;e<n;++e){const n=t[e],a=n>>16&255,o=n>>8&255,i=255&n,c=s(i,o,a);let l=c in r?r[c]:r[c]={ac:0,rc:0,gc:0,bc:0,cnt:0,nn:0,fw:0,bk:0,tm:0,mtm:0,err:0};l.rc+=i,l.gc+=o,l.bc+=a,l.cnt++}else for(let e=0;e<n;++e){const n=t[e],a=n>>16&255,o=n>>8&255,i=255&n,l=c(i,o,a);let s=l in r?r[l]:r[l]={ac:0,rc:0,gc:0,bc:0,cnt:0,nn:0,fw:0,bk:0,tm:0,mtm:0,err:0};s.rc+=i,s.gc+=o,s.bc+=a,s.cnt++}return r}(g,n),m=d.length,B=m-1,A=new Uint32Array(m+1);for(var M=0,v=0;v<m;++v){const t=d[v];if(null!=t){var k=1/t.cnt;p&&(t.ac*=k),t.rc*=k,t.gc*=k,t.bc*=k,d[M++]=t}}var x,C,U;for(u(e)/M<.022&&(b=!1),v=0;v<M-1;++v)d[v].fw=v+1,d[v+1].bk=v,b&&(d[v].cnt=Math.sqrt(d[v].cnt));for(b&&(d[v].cnt=Math.sqrt(d[v].cnt)),v=0;v<M;++v){w(d,v,!1);var F=d[v].err;for(C=++A[0];C>1&&!(d[x=A[U=C>>1]].err<=F);C=U)A[C]=x;A[C]=v}var I=M-e;for(v=0;v<I;){for(var z;;){var E=A[1];if((z=d[E]).tm>=z.mtm&&d[z.nn].mtm<=z.tm)break;for(z.mtm==B?E=A[1]=A[A[0]--]:(w(d,E,!1),z.tm=v),F=d[E].err,C=1;(U=C+C)<=A[0]&&(U<A[0]&&d[A[U]].err>d[A[U+1]].err&&U++,!(F<=d[x=A[U]].err));C=U)A[C]=x;A[C]=E}var q=d[z.nn],S=z.cnt,G=q.cnt;k=1/(S+G),p&&(z.ac=k*(S*z.ac+G*q.ac)),z.rc=k*(S*z.rc+G*q.rc),z.gc=k*(S*z.gc+G*q.gc),z.bc=k*(S*z.bc+G*q.bc),z.cnt+=q.cnt,z.mtm=++v,d[q.bk].fw=q.fw,d[q.fw].bk=q.bk,q.mtm=B}let P=[];var V=0;for(v=0;;++V){let t=f(Math.round(d[v].rc),0,255),e=f(Math.round(d[v].gc),0,255),r=f(Math.round(d[v].bc),0,255),n=255;p&&(n=f(Math.round(d[v].ac),0,255),y&&(n=n<=("number"==typeof y?y:127)?0:255),a&&n<=i&&(t=e=r=o,n=0));const c=p?[t,e,r,n]:[t,e,r];if(h(P,c)||P.push(c),0==(v=d[v].fw))break}return P}function h(t,e){for(let r=0;r<t.length;r++){const n=t[r];let a=n[0]===e[0]&&n[1]===e[1]&&n[2]===e[2],o=!(n.length>=4&&e.length>=4)||n[3]===e[3];if(a&&o)return!0}return!1}function g(t,e){var r,n=0;for(r=0;r<t.length;r++){const a=t[r]-e[r];n+=a*a}return n}function b(t,e){return e>1?Math.round(t/e)*e:t}function p(t,{roundRGB:e=5,roundAlpha:r=10,oneBitAlpha:n=null}={}){const a=new Uint32Array(t.buffer);for(let t=0;t<a.length;t++){const o=a[t];let i=o>>24&255,c=o>>16&255,l=o>>8&255,s=255&o;i=b(i,r),n&&(i=i<=("number"==typeof n?n:127)?0:255),s=b(s,e),l=b(l,e),c=b(c,e),a[t]=i<<24|c<<16|l<<8|s<<0}}function d(t,e,r="rgb565"){if(!t||!t.buffer)throw new Error("quantize() expected RGBA Uint8Array data");if(!(t instanceof Uint8Array||t instanceof Uint8ClampedArray))throw new Error("quantize() expected RGBA Uint8Array data");if(e.length>256)throw new Error("applyPalette() only works with 256 colors or less");const n=new Uint32Array(t.buffer),a=n.length,o="rgb444"===r?4096:65536,i=new Uint8Array(a),f=new Array(o);if("rgba4444"===r)for(let t=0;t<a;t++){const r=n[t],a=r>>24&255,o=r>>16&255,c=r>>8&255,s=255&r,u=l(s,c,o,a),w=u in f?f[u]:f[u]=m(s,c,o,a,e);i[t]=w}else{const t="rgb444"===r?s:c;for(let r=0;r<a;r++){const a=n[r],o=a>>16&255,c=a>>8&255,l=255&a,s=t(l,c,o),u=s in f?f[s]:f[s]=B(l,c,o,e);i[r]=u}}return i}function m(t,e,r,n,a){let o=0,i=1e100;for(let c=0;c<a.length;c++){const l=a[c];let s=M(l[3]-n);s>i||(s+=M(l[0]-t),s>i||(s+=M(l[1]-e),s>i||(s+=M(l[2]-r),s>i||(i=s,o=c))))}return o}function B(t,e,r,n){let a=0,o=1e100;for(let i=0;i<n.length;i++){const c=n[i];let l=M(c[0]-t);l>o||(l+=M(c[1]-e),l>o||(l+=M(c[2]-r),l>o||(o=l,a=i)))}return a}function A(t,e,r=5){if(!t.length||!e.length)return;const n=t.map((t=>t.slice(0,3))),a=r*r,o=t[0].length;for(let r=0;r<e.length;r++){let i=e[r];i=i.length<o?[i[0],i[1],i[2],255]:i.length>o?i.slice(0,3):i.slice();const c=k(n,i.slice(0,3),g),l=c[0],s=c[1];s>0&&s<=a&&(t[l]=i)}}function M(t){return t*t}function v(t,e,r=g){let n=1/0,a=-1;for(let o=0;o<t.length;o++){const i=r(e,t[o]);i<n&&(n=i,a=o)}return a}function k(t,e,r=g){let n=1/0,a=-1;for(let o=0;o<t.length;o++){const i=r(e,t[o]);i<n&&(n=i,a=o)}return[a,n]}function x(t,e,r=g){return t[v(t,e,r)]}function C(t={}){const{initialCapacity:e=4096,auto:r=!0}=t,o=a(e),c=new Uint8Array(256),l=new Int32Array(5003),s=new Int32Array(5003);let f=!1;return{reset(){o.reset(),f=!1},finish(){o.writeByte(n.trailer)},bytes:()=>o.bytes(),bytesView:()=>o.bytesView(),get buffer(){return o.buffer},get stream(){return o},writeHeader:u,writeFrame(t,e,n,a={}){const{transparent:w=!1,transparentIndex:y=0,delay:h=0,palette:g=null,repeat:b=0,colorDepth:p=8,dispose:d=-1}=a;let m=!1;if(r?f||(m=!0,u(),f=!0):m=Boolean(a.first),e=Math.max(0,Math.floor(e)),n=Math.max(0,Math.floor(n)),m){if(!g)throw new Error("First frame must include a { palette } option");!function(t,e,r,n,a=8){const o=128|a-1<<4|z(n.length)-1;F(t,e),F(t,r),t.writeBytes([o,0,0])}(o,e,n,g,p),U(o,g),b>=0&&function(t,e){t.writeByte(33),t.writeByte(255),t.writeByte(11),I(t,"NETSCAPE2.0"),t.writeByte(3),t.writeByte(1),F(t,e),t.writeByte(0)}(o,b)}const B=Math.round(h/10);!function(t,e,r,n,a){var o,i;t.writeByte(33),t.writeByte(249),t.writeByte(4),a<0&&(a=0,n=!1),n?(o=1,i=2):(o=0,i=0),e>=0&&(i=7&e),i<<=2;t.writeByte(0|i|o),F(t,r),t.writeByte(a||0),t.writeByte(0)}(o,d,B,w,y);const A=Boolean(g)&&!m;!function(t,e,r,n){if(t.writeByte(44),F(t,0),F(t,0),F(t,e),F(t,r),n){const e=0,r=0,a=z(n.length)-1;t.writeByte(128|e|r|0|a)}else t.writeByte(0)}(o,e,n,A?g:null),A&&U(o,g),function(t,e,r,n,a=8,o,c,l){i(r,n,e,a,t,o,c,l)}(o,t,e,n,p,c,l,s)}};function u(){I(o,"GIF89a")}}function U(t,e){const r=1<<z(e.length);for(let n=0;n<r;n++){let r=[0,0,0];n<e.length&&(r=e[n]),t.writeByte(r[0]),t.writeByte(r[1]),t.writeByte(r[2])}}function F(t,e){t.writeByte(255&e),t.writeByte(e>>8&255)}function I(t,e){for(var r=0;r<e.length;r++)t.writeByte(e.charCodeAt(r))}function z(t){return Math.max(Math.ceil(Math.log2(t)),1)}var E=C}},e={};function r(n){var a=e[n];if(void 0!==a)return a.exports;var o=e[n]={exports:{}};return t[n](o,o.exports,r),o.exports}r.n=t=>{var e=t&&t.__esModule?()=>t.default:()=>t;return r.d(e,{a:e}),e},r.d=(t,e)=>{for(var n in e)r.o(e,n)&&!r.o(t,n)&&Object.defineProperty(t,n,{enumerable:!0,get:e[n]})},r.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e),(()=>{"use strict";var t=r(5958);const e=self,n=(0,t.GIFEncoder)();e.addEventListener("message",(r=>{if(r.data.addFrame){const{data:e,transparent:a,width:o,height:i,delay:c}=r.data.addFrame,l=(0,t.quantize)(e,256,{oneBitAlpha:a}),s=(0,t.applyPalette)(e,l);n.writeFrame(s,o,i,{palette:l,delay:c,transparent:a})}else r.data.finish&&(n.finish(),e.postMessage(new Blob([n.bytes()],{type:"image/gif"})))}))})()})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/gifenc/dist/gifenc.js":
+/*!********************************************!*\
+  !*** ./node_modules/gifenc/dist/gifenc.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+var __defProp = Object.defineProperty;
+var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, {get: all[name], enumerable: true});
+};
+
+// src/index.js
+__markAsModule(exports);
+__export(exports, {
+  GIFEncoder: () => GIFEncoder,
+  applyPalette: () => applyPalette,
+  default: () => src_default,
+  nearestColor: () => nearestColor,
+  nearestColorIndex: () => nearestColorIndex,
+  nearestColorIndexWithDistance: () => nearestColorIndexWithDistance,
+  prequantize: () => prequantize,
+  quantize: () => quantize,
+  snapColorsToPalette: () => snapColorsToPalette
+});
+
+// src/constants.js
+var constants_default = {
+  signature: "GIF",
+  version: "89a",
+  trailer: 59,
+  extensionIntroducer: 33,
+  applicationExtensionLabel: 255,
+  graphicControlExtensionLabel: 249,
+  imageSeparator: 44,
+  signatureSize: 3,
+  versionSize: 3,
+  globalColorTableFlagMask: 128,
+  colorResolutionMask: 112,
+  sortFlagMask: 8,
+  globalColorTableSizeMask: 7,
+  applicationIdentifierSize: 8,
+  applicationAuthCodeSize: 3,
+  disposalMethodMask: 28,
+  userInputFlagMask: 2,
+  transparentColorFlagMask: 1,
+  localColorTableFlagMask: 128,
+  interlaceFlagMask: 64,
+  idSortFlagMask: 32,
+  localColorTableSizeMask: 7
+};
+
+// src/stream.js
+function createStream(initialCapacity = 256) {
+  let cursor = 0;
+  let contents = new Uint8Array(initialCapacity);
+  return {
+    get buffer() {
+      return contents.buffer;
+    },
+    reset() {
+      cursor = 0;
+    },
+    bytesView() {
+      return contents.subarray(0, cursor);
+    },
+    bytes() {
+      return contents.slice(0, cursor);
+    },
+    writeByte(byte) {
+      expand(cursor + 1);
+      contents[cursor] = byte;
+      cursor++;
+    },
+    writeBytes(data, offset = 0, byteLength = data.length) {
+      expand(cursor + byteLength);
+      for (let i = 0; i < byteLength; i++) {
+        contents[cursor++] = data[i + offset];
+      }
+    },
+    writeBytesView(data, offset = 0, byteLength = data.byteLength) {
+      expand(cursor + byteLength);
+      contents.set(data.subarray(offset, offset + byteLength), cursor);
+      cursor += byteLength;
+    }
+  };
+  function expand(newCapacity) {
+    var prevCapacity = contents.length;
+    if (prevCapacity >= newCapacity)
+      return;
+    var CAPACITY_DOUBLING_MAX = 1024 * 1024;
+    newCapacity = Math.max(newCapacity, prevCapacity * (prevCapacity < CAPACITY_DOUBLING_MAX ? 2 : 1.125) >>> 0);
+    if (prevCapacity != 0)
+      newCapacity = Math.max(newCapacity, 256);
+    const oldContents = contents;
+    contents = new Uint8Array(newCapacity);
+    if (cursor > 0)
+      contents.set(oldContents.subarray(0, cursor), 0);
+  }
+}
+
+// src/lzwEncode.js
+var BITS = 12;
+var DEFAULT_HSIZE = 5003;
+var MASKS = [
+  0,
+  1,
+  3,
+  7,
+  15,
+  31,
+  63,
+  127,
+  255,
+  511,
+  1023,
+  2047,
+  4095,
+  8191,
+  16383,
+  32767,
+  65535
+];
+function lzwEncode(width, height, pixels, colorDepth, outStream = createStream(512), accum = new Uint8Array(256), htab = new Int32Array(DEFAULT_HSIZE), codetab = new Int32Array(DEFAULT_HSIZE)) {
+  const hsize = htab.length;
+  const initCodeSize = Math.max(2, colorDepth);
+  accum.fill(0);
+  codetab.fill(0);
+  htab.fill(-1);
+  let cur_accum = 0;
+  let cur_bits = 0;
+  const init_bits = initCodeSize + 1;
+  const g_init_bits = init_bits;
+  let clear_flg = false;
+  let n_bits = g_init_bits;
+  let maxcode = (1 << n_bits) - 1;
+  const ClearCode = 1 << init_bits - 1;
+  const EOFCode = ClearCode + 1;
+  let free_ent = ClearCode + 2;
+  let a_count = 0;
+  let ent = pixels[0];
+  let hshift = 0;
+  for (let fcode = hsize; fcode < 65536; fcode *= 2) {
+    ++hshift;
+  }
+  hshift = 8 - hshift;
+  outStream.writeByte(initCodeSize);
+  output(ClearCode);
+  const length = pixels.length;
+  for (let idx = 1; idx < length; idx++) {
+    next_block: {
+      const c = pixels[idx];
+      const fcode = (c << BITS) + ent;
+      let i = c << hshift ^ ent;
+      if (htab[i] === fcode) {
+        ent = codetab[i];
+        break next_block;
+      }
+      const disp = i === 0 ? 1 : hsize - i;
+      while (htab[i] >= 0) {
+        i -= disp;
+        if (i < 0)
+          i += hsize;
+        if (htab[i] === fcode) {
+          ent = codetab[i];
+          break next_block;
+        }
+      }
+      output(ent);
+      ent = c;
+      if (free_ent < 1 << BITS) {
+        codetab[i] = free_ent++;
+        htab[i] = fcode;
+      } else {
+        htab.fill(-1);
+        free_ent = ClearCode + 2;
+        clear_flg = true;
+        output(ClearCode);
+      }
+    }
+  }
+  output(ent);
+  output(EOFCode);
+  outStream.writeByte(0);
+  return outStream.bytesView();
+  function output(code) {
+    cur_accum &= MASKS[cur_bits];
+    if (cur_bits > 0)
+      cur_accum |= code << cur_bits;
+    else
+      cur_accum = code;
+    cur_bits += n_bits;
+    while (cur_bits >= 8) {
+      accum[a_count++] = cur_accum & 255;
+      if (a_count >= 254) {
+        outStream.writeByte(a_count);
+        outStream.writeBytesView(accum, 0, a_count);
+        a_count = 0;
+      }
+      cur_accum >>= 8;
+      cur_bits -= 8;
+    }
+    if (free_ent > maxcode || clear_flg) {
+      if (clear_flg) {
+        n_bits = g_init_bits;
+        maxcode = (1 << n_bits) - 1;
+        clear_flg = false;
+      } else {
+        ++n_bits;
+        maxcode = n_bits === BITS ? 1 << n_bits : (1 << n_bits) - 1;
+      }
+    }
+    if (code == EOFCode) {
+      while (cur_bits > 0) {
+        accum[a_count++] = cur_accum & 255;
+        if (a_count >= 254) {
+          outStream.writeByte(a_count);
+          outStream.writeBytesView(accum, 0, a_count);
+          a_count = 0;
+        }
+        cur_accum >>= 8;
+        cur_bits -= 8;
+      }
+      if (a_count > 0) {
+        outStream.writeByte(a_count);
+        outStream.writeBytesView(accum, 0, a_count);
+        a_count = 0;
+      }
+    }
+  }
+}
+var lzwEncode_default = lzwEncode;
+
+// src/rgb-packing.js
+function rgb888_to_rgb565(r, g, b) {
+  return r << 8 & 63488 | g << 2 & 992 | b >> 3;
+}
+function rgba8888_to_rgba4444(r, g, b, a) {
+  return r >> 4 | g & 240 | (b & 240) << 4 | (a & 240) << 8;
+}
+function rgb888_to_rgb444(r, g, b) {
+  return r >> 4 << 8 | g & 240 | b >> 4;
+}
+
+// src/pnnquant2.js
+function clamp(value, min, max) {
+  return value < min ? min : value > max ? max : value;
+}
+function sqr(value) {
+  return value * value;
+}
+function find_nn(bins, idx, hasAlpha) {
+  var nn = 0;
+  var err = 1e100;
+  const bin1 = bins[idx];
+  const n1 = bin1.cnt;
+  const wa = bin1.ac;
+  const wr = bin1.rc;
+  const wg = bin1.gc;
+  const wb = bin1.bc;
+  for (var i = bin1.fw; i != 0; i = bins[i].fw) {
+    const bin = bins[i];
+    const n2 = bin.cnt;
+    const nerr2 = n1 * n2 / (n1 + n2);
+    if (nerr2 >= err)
+      continue;
+    var nerr = 0;
+    if (hasAlpha) {
+      nerr += nerr2 * sqr(bin.ac - wa);
+      if (nerr >= err)
+        continue;
+    }
+    nerr += nerr2 * sqr(bin.rc - wr);
+    if (nerr >= err)
+      continue;
+    nerr += nerr2 * sqr(bin.gc - wg);
+    if (nerr >= err)
+      continue;
+    nerr += nerr2 * sqr(bin.bc - wb);
+    if (nerr >= err)
+      continue;
+    err = nerr;
+    nn = i;
+  }
+  bin1.err = err;
+  bin1.nn = nn;
+}
+function create_bin() {
+  return {
+    ac: 0,
+    rc: 0,
+    gc: 0,
+    bc: 0,
+    cnt: 0,
+    nn: 0,
+    fw: 0,
+    bk: 0,
+    tm: 0,
+    mtm: 0,
+    err: 0
+  };
+}
+function create_bin_list(data, format) {
+  const bincount = format === "rgb444" ? 4096 : 65536;
+  const bins = new Array(bincount);
+  const size = data.length;
+  if (format === "rgba4444") {
+    for (let i = 0; i < size; ++i) {
+      const color = data[i];
+      const a = color >> 24 & 255;
+      const b = color >> 16 & 255;
+      const g = color >> 8 & 255;
+      const r = color & 255;
+      const index = rgba8888_to_rgba4444(r, g, b, a);
+      let bin = index in bins ? bins[index] : bins[index] = create_bin();
+      bin.rc += r;
+      bin.gc += g;
+      bin.bc += b;
+      bin.ac += a;
+      bin.cnt++;
+    }
+  } else if (format === "rgb444") {
+    for (let i = 0; i < size; ++i) {
+      const color = data[i];
+      const b = color >> 16 & 255;
+      const g = color >> 8 & 255;
+      const r = color & 255;
+      const index = rgb888_to_rgb444(r, g, b);
+      let bin = index in bins ? bins[index] : bins[index] = create_bin();
+      bin.rc += r;
+      bin.gc += g;
+      bin.bc += b;
+      bin.cnt++;
+    }
+  } else {
+    for (let i = 0; i < size; ++i) {
+      const color = data[i];
+      const b = color >> 16 & 255;
+      const g = color >> 8 & 255;
+      const r = color & 255;
+      const index = rgb888_to_rgb565(r, g, b);
+      let bin = index in bins ? bins[index] : bins[index] = create_bin();
+      bin.rc += r;
+      bin.gc += g;
+      bin.bc += b;
+      bin.cnt++;
+    }
+  }
+  return bins;
+}
+function quantize(rgba, maxColors, opts = {}) {
+  const {
+    format = "rgb565",
+    clearAlpha = true,
+    clearAlphaColor = 0,
+    clearAlphaThreshold = 0,
+    oneBitAlpha = false
+  } = opts;
+  if (!rgba || !rgba.buffer) {
+    throw new Error("quantize() expected RGBA Uint8Array data");
+  }
+  if (!(rgba instanceof Uint8Array) && !(rgba instanceof Uint8ClampedArray)) {
+    throw new Error("quantize() expected RGBA Uint8Array data");
+  }
+  const data = new Uint32Array(rgba.buffer);
+  let useSqrt = opts.useSqrt !== false;
+  const hasAlpha = format === "rgba4444";
+  const bins = create_bin_list(data, format);
+  const bincount = bins.length;
+  const bincountMinusOne = bincount - 1;
+  const heap = new Uint32Array(bincount + 1);
+  var maxbins = 0;
+  for (var i = 0; i < bincount; ++i) {
+    const bin = bins[i];
+    if (bin != null) {
+      var d = 1 / bin.cnt;
+      if (hasAlpha)
+        bin.ac *= d;
+      bin.rc *= d;
+      bin.gc *= d;
+      bin.bc *= d;
+      bins[maxbins++] = bin;
+    }
+  }
+  if (sqr(maxColors) / maxbins < 0.022) {
+    useSqrt = false;
+  }
+  var i = 0;
+  for (; i < maxbins - 1; ++i) {
+    bins[i].fw = i + 1;
+    bins[i + 1].bk = i;
+    if (useSqrt)
+      bins[i].cnt = Math.sqrt(bins[i].cnt);
+  }
+  if (useSqrt)
+    bins[i].cnt = Math.sqrt(bins[i].cnt);
+  var h, l, l2;
+  for (i = 0; i < maxbins; ++i) {
+    find_nn(bins, i, false);
+    var err = bins[i].err;
+    for (l = ++heap[0]; l > 1; l = l2) {
+      l2 = l >> 1;
+      if (bins[h = heap[l2]].err <= err)
+        break;
+      heap[l] = h;
+    }
+    heap[l] = i;
+  }
+  var extbins = maxbins - maxColors;
+  for (i = 0; i < extbins; ) {
+    var tb;
+    for (; ; ) {
+      var b1 = heap[1];
+      tb = bins[b1];
+      if (tb.tm >= tb.mtm && bins[tb.nn].mtm <= tb.tm)
+        break;
+      if (tb.mtm == bincountMinusOne)
+        b1 = heap[1] = heap[heap[0]--];
+      else {
+        find_nn(bins, b1, false);
+        tb.tm = i;
+      }
+      var err = bins[b1].err;
+      for (l = 1; (l2 = l + l) <= heap[0]; l = l2) {
+        if (l2 < heap[0] && bins[heap[l2]].err > bins[heap[l2 + 1]].err)
+          l2++;
+        if (err <= bins[h = heap[l2]].err)
+          break;
+        heap[l] = h;
+      }
+      heap[l] = b1;
+    }
+    var nb = bins[tb.nn];
+    var n1 = tb.cnt;
+    var n2 = nb.cnt;
+    var d = 1 / (n1 + n2);
+    if (hasAlpha)
+      tb.ac = d * (n1 * tb.ac + n2 * nb.ac);
+    tb.rc = d * (n1 * tb.rc + n2 * nb.rc);
+    tb.gc = d * (n1 * tb.gc + n2 * nb.gc);
+    tb.bc = d * (n1 * tb.bc + n2 * nb.bc);
+    tb.cnt += nb.cnt;
+    tb.mtm = ++i;
+    bins[nb.bk].fw = nb.fw;
+    bins[nb.fw].bk = nb.bk;
+    nb.mtm = bincountMinusOne;
+  }
+  let palette = [];
+  var k = 0;
+  for (i = 0; ; ++k) {
+    let r = clamp(Math.round(bins[i].rc), 0, 255);
+    let g = clamp(Math.round(bins[i].gc), 0, 255);
+    let b = clamp(Math.round(bins[i].bc), 0, 255);
+    let a = 255;
+    if (hasAlpha) {
+      a = clamp(Math.round(bins[i].ac), 0, 255);
+      if (oneBitAlpha) {
+        const threshold = typeof oneBitAlpha === "number" ? oneBitAlpha : 127;
+        a = a <= threshold ? 0 : 255;
+      }
+      if (clearAlpha && a <= clearAlphaThreshold) {
+        r = g = b = clearAlphaColor;
+        a = 0;
+      }
+    }
+    const color = hasAlpha ? [r, g, b, a] : [r, g, b];
+    const exists = existsInPalette(palette, color);
+    if (!exists)
+      palette.push(color);
+    if ((i = bins[i].fw) == 0)
+      break;
+  }
+  return palette;
+}
+function existsInPalette(palette, color) {
+  for (let i = 0; i < palette.length; i++) {
+    const p = palette[i];
+    let matchesRGB = p[0] === color[0] && p[1] === color[1] && p[2] === color[2];
+    let matchesAlpha = p.length >= 4 && color.length >= 4 ? p[3] === color[3] : true;
+    if (matchesRGB && matchesAlpha)
+      return true;
+  }
+  return false;
+}
+
+// src/color.js
+function euclideanDistanceSquared(a, b) {
+  var sum = 0;
+  var n;
+  for (n = 0; n < a.length; n++) {
+    const dx = a[n] - b[n];
+    sum += dx * dx;
+  }
+  return sum;
+}
+
+// src/palettize.js
+function roundStep(byte, step) {
+  return step > 1 ? Math.round(byte / step) * step : byte;
+}
+function prequantize(rgba, {roundRGB = 5, roundAlpha = 10, oneBitAlpha = null} = {}) {
+  const data = new Uint32Array(rgba.buffer);
+  for (let i = 0; i < data.length; i++) {
+    const color = data[i];
+    let a = color >> 24 & 255;
+    let b = color >> 16 & 255;
+    let g = color >> 8 & 255;
+    let r = color & 255;
+    a = roundStep(a, roundAlpha);
+    if (oneBitAlpha) {
+      const threshold = typeof oneBitAlpha === "number" ? oneBitAlpha : 127;
+      a = a <= threshold ? 0 : 255;
+    }
+    r = roundStep(r, roundRGB);
+    g = roundStep(g, roundRGB);
+    b = roundStep(b, roundRGB);
+    data[i] = a << 24 | b << 16 | g << 8 | r << 0;
+  }
+}
+function applyPalette(rgba, palette, format = "rgb565") {
+  if (!rgba || !rgba.buffer) {
+    throw new Error("quantize() expected RGBA Uint8Array data");
+  }
+  if (!(rgba instanceof Uint8Array) && !(rgba instanceof Uint8ClampedArray)) {
+    throw new Error("quantize() expected RGBA Uint8Array data");
+  }
+  if (palette.length > 256) {
+    throw new Error("applyPalette() only works with 256 colors or less");
+  }
+  const data = new Uint32Array(rgba.buffer);
+  const length = data.length;
+  const bincount = format === "rgb444" ? 4096 : 65536;
+  const index = new Uint8Array(length);
+  const cache = new Array(bincount);
+  const hasAlpha = format === "rgba4444";
+  if (format === "rgba4444") {
+    for (let i = 0; i < length; i++) {
+      const color = data[i];
+      const a = color >> 24 & 255;
+      const b = color >> 16 & 255;
+      const g = color >> 8 & 255;
+      const r = color & 255;
+      const key = rgba8888_to_rgba4444(r, g, b, a);
+      const idx = key in cache ? cache[key] : cache[key] = nearestColorIndexRGBA(r, g, b, a, palette);
+      index[i] = idx;
+    }
+  } else {
+    const rgb888_to_key = format === "rgb444" ? rgb888_to_rgb444 : rgb888_to_rgb565;
+    for (let i = 0; i < length; i++) {
+      const color = data[i];
+      const b = color >> 16 & 255;
+      const g = color >> 8 & 255;
+      const r = color & 255;
+      const key = rgb888_to_key(r, g, b);
+      const idx = key in cache ? cache[key] : cache[key] = nearestColorIndexRGB(r, g, b, palette);
+      index[i] = idx;
+    }
+  }
+  return index;
+}
+function nearestColorIndexRGBA(r, g, b, a, palette) {
+  let k = 0;
+  let mindist = 1e100;
+  for (let i = 0; i < palette.length; i++) {
+    const px2 = palette[i];
+    const a2 = px2[3];
+    let curdist = sqr2(a2 - a);
+    if (curdist > mindist)
+      continue;
+    const r2 = px2[0];
+    curdist += sqr2(r2 - r);
+    if (curdist > mindist)
+      continue;
+    const g2 = px2[1];
+    curdist += sqr2(g2 - g);
+    if (curdist > mindist)
+      continue;
+    const b2 = px2[2];
+    curdist += sqr2(b2 - b);
+    if (curdist > mindist)
+      continue;
+    mindist = curdist;
+    k = i;
+  }
+  return k;
+}
+function nearestColorIndexRGB(r, g, b, palette) {
+  let k = 0;
+  let mindist = 1e100;
+  for (let i = 0; i < palette.length; i++) {
+    const px2 = palette[i];
+    const r2 = px2[0];
+    let curdist = sqr2(r2 - r);
+    if (curdist > mindist)
+      continue;
+    const g2 = px2[1];
+    curdist += sqr2(g2 - g);
+    if (curdist > mindist)
+      continue;
+    const b2 = px2[2];
+    curdist += sqr2(b2 - b);
+    if (curdist > mindist)
+      continue;
+    mindist = curdist;
+    k = i;
+  }
+  return k;
+}
+function snapColorsToPalette(palette, knownColors, threshold = 5) {
+  if (!palette.length || !knownColors.length)
+    return;
+  const paletteRGB = palette.map((p) => p.slice(0, 3));
+  const thresholdSq = threshold * threshold;
+  const dim = palette[0].length;
+  for (let i = 0; i < knownColors.length; i++) {
+    let color = knownColors[i];
+    if (color.length < dim) {
+      color = [color[0], color[1], color[2], 255];
+    } else if (color.length > dim) {
+      color = color.slice(0, 3);
+    } else {
+      color = color.slice();
+    }
+    const r = nearestColorIndexWithDistance(paletteRGB, color.slice(0, 3), euclideanDistanceSquared);
+    const idx = r[0];
+    const distanceSq = r[1];
+    if (distanceSq > 0 && distanceSq <= thresholdSq) {
+      palette[idx] = color;
+    }
+  }
+}
+function sqr2(a) {
+  return a * a;
+}
+function nearestColorIndex(colors, pixel, distanceFn = euclideanDistanceSquared) {
+  let minDist = Infinity;
+  let minDistIndex = -1;
+  for (let j = 0; j < colors.length; j++) {
+    const paletteColor = colors[j];
+    const dist = distanceFn(pixel, paletteColor);
+    if (dist < minDist) {
+      minDist = dist;
+      minDistIndex = j;
+    }
+  }
+  return minDistIndex;
+}
+function nearestColorIndexWithDistance(colors, pixel, distanceFn = euclideanDistanceSquared) {
+  let minDist = Infinity;
+  let minDistIndex = -1;
+  for (let j = 0; j < colors.length; j++) {
+    const paletteColor = colors[j];
+    const dist = distanceFn(pixel, paletteColor);
+    if (dist < minDist) {
+      minDist = dist;
+      minDistIndex = j;
+    }
+  }
+  return [minDistIndex, minDist];
+}
+function nearestColor(colors, pixel, distanceFn = euclideanDistanceSquared) {
+  return colors[nearestColorIndex(colors, pixel, distanceFn)];
+}
+
+// src/index.js
+function GIFEncoder(opt = {}) {
+  const {initialCapacity = 4096, auto = true} = opt;
+  const stream = createStream(initialCapacity);
+  const HSIZE = 5003;
+  const accum = new Uint8Array(256);
+  const htab = new Int32Array(HSIZE);
+  const codetab = new Int32Array(HSIZE);
+  let hasInit = false;
+  return {
+    reset() {
+      stream.reset();
+      hasInit = false;
+    },
+    finish() {
+      stream.writeByte(constants_default.trailer);
+    },
+    bytes() {
+      return stream.bytes();
+    },
+    bytesView() {
+      return stream.bytesView();
+    },
+    get buffer() {
+      return stream.buffer;
+    },
+    get stream() {
+      return stream;
+    },
+    writeHeader,
+    writeFrame(index, width, height, opts = {}) {
+      const {
+        transparent = false,
+        transparentIndex = 0,
+        delay = 0,
+        palette = null,
+        repeat = 0,
+        colorDepth = 8,
+        dispose = -1
+      } = opts;
+      let first = false;
+      if (auto) {
+        if (!hasInit) {
+          first = true;
+          writeHeader();
+          hasInit = true;
+        }
+      } else {
+        first = Boolean(opts.first);
+      }
+      width = Math.max(0, Math.floor(width));
+      height = Math.max(0, Math.floor(height));
+      if (first) {
+        if (!palette) {
+          throw new Error("First frame must include a { palette } option");
+        }
+        encodeLogicalScreenDescriptor(stream, width, height, palette, colorDepth);
+        encodeColorTable(stream, palette);
+        if (repeat >= 0) {
+          encodeNetscapeExt(stream, repeat);
+        }
+      }
+      const delayTime = Math.round(delay / 10);
+      encodeGraphicControlExt(stream, dispose, delayTime, transparent, transparentIndex);
+      const useLocalColorTable = Boolean(palette) && !first;
+      encodeImageDescriptor(stream, width, height, useLocalColorTable ? palette : null);
+      if (useLocalColorTable)
+        encodeColorTable(stream, palette);
+      encodePixels(stream, index, width, height, colorDepth, accum, htab, codetab);
+    }
+  };
+  function writeHeader() {
+    writeUTFBytes(stream, "GIF89a");
+  }
+}
+function encodeGraphicControlExt(stream, dispose, delay, transparent, transparentIndex) {
+  stream.writeByte(33);
+  stream.writeByte(249);
+  stream.writeByte(4);
+  if (transparentIndex < 0) {
+    transparentIndex = 0;
+    transparent = false;
+  }
+  var transp, disp;
+  if (!transparent) {
+    transp = 0;
+    disp = 0;
+  } else {
+    transp = 1;
+    disp = 2;
+  }
+  if (dispose >= 0) {
+    disp = dispose & 7;
+  }
+  disp <<= 2;
+  const userInput = 0;
+  stream.writeByte(0 | disp | userInput | transp);
+  writeUInt16(stream, delay);
+  stream.writeByte(transparentIndex || 0);
+  stream.writeByte(0);
+}
+function encodeLogicalScreenDescriptor(stream, width, height, palette, colorDepth = 8) {
+  const globalColorTableFlag = 1;
+  const sortFlag = 0;
+  const globalColorTableSize = colorTableSize(palette.length) - 1;
+  const fields = globalColorTableFlag << 7 | colorDepth - 1 << 4 | sortFlag << 3 | globalColorTableSize;
+  const backgroundColorIndex = 0;
+  const pixelAspectRatio = 0;
+  writeUInt16(stream, width);
+  writeUInt16(stream, height);
+  stream.writeBytes([fields, backgroundColorIndex, pixelAspectRatio]);
+}
+function encodeNetscapeExt(stream, repeat) {
+  stream.writeByte(33);
+  stream.writeByte(255);
+  stream.writeByte(11);
+  writeUTFBytes(stream, "NETSCAPE2.0");
+  stream.writeByte(3);
+  stream.writeByte(1);
+  writeUInt16(stream, repeat);
+  stream.writeByte(0);
+}
+function encodeColorTable(stream, palette) {
+  const colorTableLength = 1 << colorTableSize(palette.length);
+  for (let i = 0; i < colorTableLength; i++) {
+    let color = [0, 0, 0];
+    if (i < palette.length) {
+      color = palette[i];
+    }
+    stream.writeByte(color[0]);
+    stream.writeByte(color[1]);
+    stream.writeByte(color[2]);
+  }
+}
+function encodeImageDescriptor(stream, width, height, localPalette) {
+  stream.writeByte(44);
+  writeUInt16(stream, 0);
+  writeUInt16(stream, 0);
+  writeUInt16(stream, width);
+  writeUInt16(stream, height);
+  if (localPalette) {
+    const interlace = 0;
+    const sorted = 0;
+    const palSize = colorTableSize(localPalette.length) - 1;
+    stream.writeByte(128 | interlace | sorted | 0 | palSize);
+  } else {
+    stream.writeByte(0);
+  }
+}
+function encodePixels(stream, index, width, height, colorDepth = 8, accum, htab, codetab) {
+  lzwEncode_default(width, height, index, colorDepth, stream, accum, htab, codetab);
+}
+function writeUInt16(stream, short) {
+  stream.writeByte(short & 255);
+  stream.writeByte(short >> 8 & 255);
+}
+function writeUTFBytes(stream, text) {
+  for (var i = 0; i < text.length; i++) {
+    stream.writeByte(text.charCodeAt(i));
+  }
+}
+function colorTableSize(length) {
+  return Math.max(Math.ceil(Math.log2(length)), 1);
+}
+var src_default = GIFEncoder;
+//# sourceMappingURL=gifenc.js.map
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+/*!**************************!*\
+  !*** ./src/gifworker.ts ***!
+  \**************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var gifenc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gifenc */ "./node_modules/gifenc/dist/gifenc.js");
+/* harmony import */ var gifenc__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gifenc__WEBPACK_IMPORTED_MODULE_0__);
+
+// eslint-disable-next-line no-restricted-globals, @typescript-eslint/no-explicit-any
+const ctx = self;
+const encoder = (0,gifenc__WEBPACK_IMPORTED_MODULE_0__.GIFEncoder)();
+ctx.addEventListener("message", (msg) => {
+    if (msg.data.addFrame) {
+        const { data, transparent, width, height, delay } = msg.data.addFrame;
+        const palette = (0,gifenc__WEBPACK_IMPORTED_MODULE_0__.quantize)(data, 256, { oneBitAlpha: transparent });
+        const index = (0,gifenc__WEBPACK_IMPORTED_MODULE_0__.applyPalette)(data, palette);
+        encoder.writeFrame(index, width, height, { palette, delay, transparent });
+    }
+    else if (msg.data.finish) {
+        encoder.finish();
+        ctx.postMessage(new Blob([encoder.bytes()], { type: "image/gif" }));
+    }
+});
+
+})();
+
+/******/ })()
+;
 //# sourceMappingURL=gifworker.js.map
