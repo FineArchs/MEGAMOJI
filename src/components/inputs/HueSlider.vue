@@ -72,6 +72,7 @@ export default defineComponent({
   left: 0;
   width: 100%;
   height: var(--sliderKnobSize);
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
   overflow: hidden;
   font-size: var(--fontSizeMedium);
   line-height: 1;

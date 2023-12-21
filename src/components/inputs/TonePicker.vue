@@ -83,6 +83,7 @@ export default defineComponent({
   left: 0;
   width: 100%;
   height: 100%;
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
   overflow: hidden;
   cursor: pointer;
   /* stylelint-disable-next-line plugin/no-unsupported-browser-features */

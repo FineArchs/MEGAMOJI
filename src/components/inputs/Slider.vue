@@ -233,6 +233,7 @@ export default defineComponent({
 
 .knob-value {
   margin-top: var(--sliderValueMargin);
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
   overflow: hidden;
   text-overflow: ellipsis;
 }
